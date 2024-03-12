@@ -8,3 +8,5 @@ This Lincence will be MIT.
 I am trying to build a rubust Formular Collection, which can use for quick calculation of typical mechanical / technical problems and getting results for documentation.
 
 HOPEFULLY MathCAD may replaced for routine calculations.
+
+The actual complete framework may reviewed at homepage: https://angulartool.de
