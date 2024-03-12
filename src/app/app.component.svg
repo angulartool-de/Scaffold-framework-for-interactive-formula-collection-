@@ -1,0 +1,18 @@
+﻿<header>
+  <jg-header></jg-header>
+</header>
+<nav>
+  <jg-navigation></jg-navigation>
+</nav>
+<br>
+<body>
+<div style="padding-left: 20px;">
+  <br>
+  <router-outlet></router-outlet>
+  <br>
+</div>
+</body>
+<footer>
+  <jg-footer></jg-footer>
+
+</footer>

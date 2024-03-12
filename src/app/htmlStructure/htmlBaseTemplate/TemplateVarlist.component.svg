@@ -1,0 +1,235 @@
+<h2 class="TextAsButton">{{ htmlButtonName }}</h2>
+<!--        (click)="visible=!visible"-->
+
+
+<img
+  *ngIf="  jpgSource!=''||jpgSource "
+  [src]=jpgSource
+  alt="kein Bild zur Verfügung"
+  height="280"
+  width="auto"
+>
+
+
+<!--<div *ngIf="visible">-->
+<div>
+
+
+  <div><input
+    [(ngModel)]=BerechnungsName
+    class=' inputLabel'
+    jgInputStringRestriction
+  >
+
+    <input
+      (keyup)="IndexUdate()"
+      [(ngModel)]=subindex
+      class='inputvarSymbolc'
+      jgInputStringRestriction
+    >
+    <p style="display:inline">Überschreibt alle Indexes auf einmal</p>
+
+
+  </div>
+
+  <br>
+
+
+  <div [id]=htmlButtonName>
+
+
+    <table *ngFor="let variable of  variableList; let i =   index ">
+
+      <tr *ngIf="  (variable).varName !=  undefined ">
+
+        <td class="Spalte1">
+          <input
+            [(ngModel)]='variable.varLabel'
+            class='inputLabel'
+            jgInputStringRestriction
+          >
+        </td>
+
+
+        <td class="Spalte2">
+          <label>[</label>
+        </td>
+
+        <td class="Spalte3a">
+          <input
+            [(ngModel)]='variable.varSymbol'
+            class="inputvarSymbola"
+            jgInputStringRestriction
+          >
+        </td>
+
+
+        <td class="Spalte3b">
+          <input
+            [(ngModel)]='variable.subtext'
+            class="inputvarSymbolb"
+            jgInputStringRestriction
+          >
+        </td>
+
+
+        <td class="Spalte3c">
+          <input
+            [(ngModel)]='variable.subindex'
+            class="inputvarSymbolc"
+            jgInputStringRestriction
+          >
+        </td>
+
+
+        <td class="Spalte4">
+          <label>]:</label>
+        </td>
+
+        <td class="Spalte5">
+          <button (click)='fix_change(variableList[i])'
+                  *ngIf="(variable.fixActiv) == true "
+
+                  class="btmfix_change"
+          > {{ variable.fixLabelStr }}
+          </button>
+        </td>
+
+        <td *ngIf="(variable.ergebnis) != true   && (variable.selectBox) != true " class='Spalte7'>
+          <input
+            (keyup)='   keyup (variable)'
+            [(ngModel)]='variable.inputStr'
+            class="inputBoxStyle1"
+            jgInputRestriction
+          >
+        </td>
+
+
+        <td *ngIf="(variable.ergebnis) != true  && variable.selectBox == true  " class='Spalte7'>
+          <select (change)=" keyup (variable)"
+                  [(ngModel)]='variable.inputStr'
+                  [name]='variable.varName'
+                  class="inputBoxStyle1"
+                  jgInputRestriction>
+            <option *ngFor="let item of variable.inputValueString"
+                    [value]="item">
+              {{ item }}
+            </option>
+          </select>
+        </td>
+
+
+        <td *ngIf=" variableList[i].ergebnis == true  " class='Spalte7'>
+          <label class='ergebnisValue'> {{ variable.showValue | number: '1.0-2' }} </label>
+        </td>
+
+
+        <td *ngIf=" variableList[i].unit !== '' " class="Spalte8">
+          <button
+            (click)='unitSwitch(variable)'
+            class="btmEinheiten"
+          >{{ variableList[i].unit }}
+          </button>
+        </td>
+
+        <td *ngIf=" variableList[i].unit === '' " class="Spalte8">
+        </td>
+
+        <td *ngIf="       (variable.selectBox) != true  " class="Spalte9">
+          <label> = {{ variable.nominalValue | number: '1.0-2' }}  {{ variable.unitBase }} </label>
+        </td>
+
+
+        <!--        <td  class="Spalte8">-->
+        <!--          <button-->
+        <!--            (click)='VarStore(variableList[i])'-->
+        <!--            class="btmEinheiten"-->
+        <!--          >{{ variableList[i].unit }}-->
+        <!--          </button>-->
+        <!--        </td>-->
+
+
+        <!--        <td  class='Spalte7'>-->
+        <!--          <select (change)=" keyup (variable)"-->
+        <!--                  [(ngModel)]='variable.keyStr'-->
+        <!--                  [name]='variable.keyStr'-->
+        <!--                  class="inputBoxStyle1"-->
+        <!--                  jgInputRestriction>-->
+        <!--            <option *ngFor="let item of variable.SelKeyStr"-->
+        <!--                    [value]="item">-->
+        <!--              {{ item }}-->
+        <!--            </option>-->
+        <!--          </select>-->
+        <!--        </td>-->
+
+
+        <!--        <td class="Spalte10">-->
+        <!--          <label>selectBox {{ variable.selectBox}} : inputValueString {{variable.inputValueString}} </label>-->
+        <!--        </td>-->
+
+
+      </tr>
+
+      <br *ngIf="  (variable) == 'br' ">
+      <p *ngIf=" (variable).varName == undefined && (variable) != 'br' "> {{ variable }} </p>
+
+
+    </table>
+
+    <br>
+
+
+  </div>
+  <!--Zusätzlicher HTML CODE -->
+  <ng-container *ngIf="!!addHTML">
+    <div [innerHTML]="addHTML"></div>
+  </ng-container>
+
+
+  <!--BERECHNUNGEN UND ERGEBISSE DRUCKEN -->
+
+  <h3
+    (click)="visibleCalc=!visibleCalc"
+    class="TextAsButtonErgebnis">Ergebnis</h3>
+  <div *ngIf="visibleCalc"
+       class="AusdruckErg">
+    Werteliste für {{ BerechnungsName }}:<br>
+
+    <table *ngFor="let variable of  variableObjList; let i =   index ">
+      <tr *ngIf="       (variable.selectBox) != true  ">
+        <div>
+          {{ variable.varLabel }} [{{ variable.varSymbol }}
+          <sub>{{ variable.subtext }}</sub><sub>{{ variable.subindex }}</sub>
+          ]: {{ variable.showValue | number: '1.0-2' }} {{ variable.unit }}  <br>
+        </div>
+      <tr>
+
+      <tr *ngIf="       (variable.selectBox) == true  ">
+        <div>
+          {{ variable.varLabel }} [{{ variable.varSymbol }}
+          <sub>{{ variable.subtext }}</sub><sub>{{ variable.subindex }}</sub>
+          ]: {{ variable.inputStr }} {{ variable.unit }} <br>
+        </div>
+      <tr>
+    </table>
+
+  </div>
+
+  <br>
+  <br>
+</div>
+
+<!--Zusätzlicher HTML CODE -->
+<br>
+<ng-container *ngIf="!!addHTMLerg">
+  <div>{{ addHTMLerg }}</div>
+</ng-container>
+
+<div *ngIf="visible">
+  <br> <br><br>
+</div>
+
+
+
+
+
